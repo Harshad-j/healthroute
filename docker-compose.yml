@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: harshadj/healthroute-backend:latest // <--- USE IMAGE instead of build
+    image: harshadj/healthroute-backend:latest
     ports:
       - "5000:5000"
     environment:
@@ -11,7 +11,7 @@ services:
     restart: always
 
   frontend:
-    image: harshadj/healthroute-frontend:latest // <--- USE IMAGE instead of build
+    image: harshadj/healthroute-frontend:latest
     ports:
       - "80:80"
     depends_on:
