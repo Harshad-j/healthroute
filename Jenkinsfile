@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_USER = "your-dockerhub-username"
+        DOCKER_HUB_USER = "harshadj"
         DOCKER_HUB_REPO = "healthroute"
         AWS_REGION = "us-east-1"
         EC2_USER = "ubuntu"
