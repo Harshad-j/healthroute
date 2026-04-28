@@ -9,6 +9,6 @@ variable "ami_id" {
 
 variable "key_name" {
   description = "Name of the AWS Key Pair"
-  default     = "aws-ec2-key" 
+  default     = "healthroute-key" 
 }
 
