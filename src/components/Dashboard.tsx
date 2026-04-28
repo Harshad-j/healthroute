@@ -17,7 +17,7 @@ export default function Dashboard() {
   const [healthData, setHealthData] = useState<HealthDataRecord[]>([]);
   const [deficiencyData, setDeficiencyData] = useState<DeficiencyRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [todaysMeals, setTodaysMeals] = useState<Array<{ id?: string; name: string; type: 'breakfast'|'lunch'|'dinner'|'snack'; prepTime?: number; }>>([]);
+  const [todaysMeals, setTodaysMeals] = useState<Array<{ id?: string; name: string; type: 'breakfast' | 'lunch' | 'dinner' | 'snack'; prepTime?: number; }>>([]);
   const userId = 'user123'; // In a real app, this would come from authentication
 
   // Fetch health and deficiency data from the database
@@ -27,10 +27,10 @@ export default function Dashboard() {
         setLoading(true);
         const healthRecords = await getAllHealthData(userId);
         const deficiencyRecords = await getAllDeficiencyData(userId);
-        
+
         setHealthData(healthRecords);
         setDeficiencyData(deficiencyRecords);
-        
+
         // Update stats based on the fetched data
         updateStatsFromData(healthRecords, deficiencyRecords);
 
@@ -50,7 +50,7 @@ export default function Dashboard() {
           const day = latestPlan.weekPlan.days.find((d: any) => String(d.dayName).toLowerCase() === todayName.toLowerCase());
           if (day && Array.isArray(day.meals)) {
             // Prefer only Breakfast/Lunch/Dinner in this widget
-            const filtered = day.meals.filter((m: any) => ['breakfast','lunch','dinner'].includes(m.type));
+            const filtered = day.meals.filter((m: any) => ['breakfast', 'lunch', 'dinner'].includes(m.type));
             setTodaysMeals(filtered.map((m: any) => ({ id: m.id, name: m.name, type: m.type, prepTime: m.prepTime })));
           } else {
             setTodaysMeals([]);
@@ -72,18 +72,18 @@ export default function Dashboard() {
   const updateStatsFromData = (healthRecords: HealthDataRecord[], deficiencyRecords: DeficiencyRecord[]) => {
     // Calculate nutrient score based on deficiency data
     const nutrientScore = calculateNutrientScore(deficiencyRecords);
-    
+
     // Update the stats with real data
     setStats(prevStats => {
       const newStats = [...prevStats];
-      
+
       // Update Nutrient Score
       newStats[0] = {
         ...newStats[0],
         value: `${nutrientScore}%`,
         trend: calculateTrend(deficiencyRecords, 'score')
       };
-      
+
       return newStats;
     });
   };
@@ -91,32 +91,32 @@ export default function Dashboard() {
   // Calculate nutrient score based on deficiency records
   const calculateNutrientScore = (records: DeficiencyRecord[]): number => {
     if (records.length === 0) return 92; // Default score if no data
-    
+
     // Count normal vs deficient nutrients
     const normalCount = records.filter(r => r.status === 'normal').length;
     const totalCount = records.length;
-    
+
     return Math.round((normalCount / totalCount) * 100);
   };
 
   // Calculate trend based on historical data
   const calculateTrend = (records: DeficiencyRecord[], type: 'score' | 'other'): string => {
     if (records.length < 2) return '+0%';
-    
+
     // Sort by date (oldest first)
     const sortedRecords = [...records].sort((a, b) => a.date.getTime() - b.date.getTime());
-    
+
     // For simplicity, just compare the most recent two periods
     const recentRecords = sortedRecords.slice(-2);
-    
+
     if (type === 'score') {
       const oldNormalCount = recentRecords[0].status === 'normal' ? 1 : 0;
       const newNormalCount = recentRecords[1].status === 'normal' ? 1 : 0;
-      
+
       const diff = newNormalCount - oldNormalCount;
       return diff >= 0 ? `+${diff}` : `${diff}`;
     }
-    
+
     return '+0%';
   };
 
@@ -129,7 +129,7 @@ export default function Dashboard() {
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Welcome back{AuthService.currentUser() ? `, ${AuthService.currentUser()!.name}` : ''}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Wecome back{AuthService.currentUser() ? `, ${AuthService.currentUser()!.name}` : ''}</h1>
           <p className="text-gray-600 dark:text-gray-300">Here's your health overview for today</p>
         </div>
         <button onClick={handleUpdateHealthData} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
@@ -203,7 +203,7 @@ export default function Dashboard() {
                     </p>
                   </div>
                   <p className={`text-sm ${index % 2 === 0 ? 'text-emerald-700 dark:text-emerald-200' : 'text-blue-700 dark:text-blue-200'}`}>
-                    Your {deficiency.nutrient} levels are {deficiency.status}. 
+                    Your {deficiency.nutrient} levels are {deficiency.status}.
                     {deficiency.status === 'deficient' && 'Consider increasing intake through diet or supplements.'}
                     {deficiency.status === 'excess' && 'Consider reducing intake to maintain optimal health.'}
                     {deficiency.status === 'normal' && 'Keep up the good work!'}
