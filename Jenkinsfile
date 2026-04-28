@@ -52,9 +52,9 @@ pipeline {
             steps {
                 script {
                     def publicIp = sh(script: "cd terraform && terraform output -raw public_ip", returnStdout: true).trim()
-                    sshagent(['aws-ec2-key']) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'aws-ec2-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
                         sh """
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${publicIp} "
+                        ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${publicIp} "
                             docker-compose down || true
                             docker-compose pull
                             docker-compose up -d
