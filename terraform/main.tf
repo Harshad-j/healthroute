@@ -40,7 +40,7 @@ resource "aws_security_group" "healthroute_sg" {
 # EC2 Instance
 resource "aws_instance" "healthroute_server" {
   ami           = var.ami_id
-  instance_type = "t2.micro" # Free Tier
+  instance_type = "m7i-flex.large" # Free Tier
   key_name      = var.key_name
 
   vpc_security_group_ids = [aws_security_group.healthroute_sg.id]
