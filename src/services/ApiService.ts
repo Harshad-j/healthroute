@@ -21,7 +21,7 @@ export interface ApiMealPlan {
   };
 }
 
-const BASE_URL = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:8081/api';
+const BASE_URL = '/api';
 
 export const ApiService = {
   async saveHealthEntry(payload: {
