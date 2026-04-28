@@ -53,6 +53,10 @@ pipeline {
                 script {
                     def publicIp = sh(script: "cd terraform && terraform output -raw public_ip", returnStdout: true).trim()
                     withCredentials([sshUserPrivateKey(credentialsId: 'aws-ec2-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+                        // 1. Copy the docker-compose file to the remote server
+                        sh "scp -o StrictHostKeyChecking=no -i ${SSH_KEY} docker-compose.yml ${SSH_USER}@${publicIp}:/home/ubuntu/docker-compose.yml"
+                        
+                        // 2. Run the deployment commands
                         sh """
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${publicIp} "
                             docker-compose down || true
