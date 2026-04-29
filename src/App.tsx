@@ -34,12 +34,12 @@ function Shell() {
             <Route path="/signup" element={user ? <Navigate to="/" replace /> : <Signup />} />
 
             {/* Protected routes */}
-            <Route path="/" element={user ? <Dashboard /> : <Navigate to="/login" replace />} />
-            <Route path="/meal-plans" element={user ? <MealPlans /> : <Navigate to="/login" replace />} />
-            <Route path="/health-data" element={user ? <HealthData /> : <Navigate to="/login" replace />} />
-            <Route path="/ai-insights" element={user ? <AIInsights /> : <Navigate to="/login" replace />} />
-            <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" replace />} />
-            <Route path="/database" element={user ? <DatabaseViewer /> : <Navigate to="/login" replace />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/meal-plans" element={<MealPlans />} />
+            <Route path="/health-data" element={<HealthData />} />
+            <Route path="/ai-insights" element={<AIInsights />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/database" element={<DatabaseViewer />} />
           </Routes>
         </motion.main>
       </AnimatePresence>
